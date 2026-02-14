@@ -3,13 +3,14 @@
 # Pirate 3D — Three.js + Capacitor for Desktop & iOS
 
 This repo is the companion project for the YouTube build:
-**"How to Vibe Code 3D iOS Apps with Claude Code"** ([watch on YouTube](https://www.youtube.com/watch?v=fu7NZ3t3sLM))
+**"How I Vibe Code 3D Games With AI - Full Tutorial)"** ([watch on YouTube](https://www.youtube.com/watch?v=fu7NZ3t3sLM))
 
 It includes:
-- An interactive 3D character viewer built with **Three.js r150+** and **Vite** — animated GLB models with orbit camera controls.
-- 2 characters (Pirate & Bartender) with idle, walk, run, and talk animations driven by a JSON animation index.
-- Touch controls (single-finger rotate, two-finger zoom/pan) for iOS deployment via **Capacitor**.
-- The **Agent Skills** used in the video (Claude Code for Three.js scene building & Capacitor iOS builds).
+- **Agent Skills** for Claude Code and Codex CLI — Three.js scene building, GLTF loading, and Capacitor iOS integration.
+- **AI Prompts** used in the video to generate characters, backgrounds, voices, animations, and the Three.js scene.
+- A **JSON animation index** (`assets_index.json`) that defines the animation contract for two characters (Pirate & Bartender) — clip names, durations, loop modes, and crossfade timing — showing how to structure metadata for GLB-based character animation.
+
+This is a reference/template repo. It does not include runnable app code or GLB model files — those are built during the video using the skills and prompts provided here.
 
 ## Want more?
 
@@ -17,40 +18,48 @@ If you want the all-in-one workflow kit I use across **Claude Code, Codex CLI, a
 
 ---
 
-## Running the App
+## Using the Skills
 
-Requires [Node.js 18+](https://nodejs.org/) installed.
+Copy the skill folders into your project to give your AI coding agent context for Three.js and Capacitor iOS workflows.
 
-```bash
-npm install
-npm run dev
-```
+**Three.js Builder** (`.claude/skills/threejs-builder/` or `.codex/skills/threejs-builder/`)
+Covers scene setup, GLTF/GLB loading, animation mixing, shaders, post-processing, and game patterns like state machines and parallax.
 
-### iOS (requires macOS + Xcode)
+**Capacitor iOS** (`.codex/skills/threejs-capacitor-ios/`)
+Covers Capacitor native sync, SPM vs CocoaPods, common iOS gotchas, and the animation index metadata pattern.
 
-```bash
-npm run build
-npx cap sync ios
-npx cap run ios
-```
+## Using the Prompts
 
-No external sprites or textures — characters are self-contained GLB models.
+The `prompts/` folder contains the step-by-step AI prompts from the video:
+
+1. **01-character-creation.txt** — Gemini 3D character generation (whimsical pirate, t-pose GLB)
+2. **02-level-creation.txt** — 2.5D pre-rendered background image creation
+3. **03-character-voice.txt** — Voice persona definitions
+4. **04-animate-bg.txt** — Looping background animation hints
+5. **05-asset-json.txt** — Generate `assets_index.json` from GLB model clips
+6. **06-threejs-scene.txt** — Three.js viewer scene setup with orbit controls and touch input
+
+## Animation Index
+
+`public/assets/assets_index.json` defines the animation metadata contract for two characters. Each entry maps a friendly action name (idle, walk, run, talk) to the actual clip name inside the GLB, along with duration, loop mode, and default state. No GLB files are included — the JSON shows the expected structure so you can wire up your own models.
 
 ## Project Structure
 
 ```
+.claude/skills/         # Claude Code agent skills
+.codex/skills/          # Codex CLI agent skills
 public/
   assets/
-    assets_index.json         # Animation metadata (clip names, durations, loop modes)
+    assets_index.json   # Animation metadata (clip names, durations, loop modes)
 prompts/
-  01-character-creation.txt   # Gemini 3D character generation
-  02-level-creation.txt       # 2.5D background creation
-  03-character-voice.txt      # Voice persona definitions
-  04-animate-bg.txt           # Looping background animations
-  05-asset-json.txt           # Animation index metadata
-  06-threejs-scene.txt        # Three.js viewer scene setup
+  01-character-creation.txt
+  02-level-creation.txt
+  03-character-voice.txt
+  04-animate-bg.txt
+  05-asset-json.txt
+  06-threejs-scene.txt
 docs/
-  preview.gif                 # Demo recordings
+  preview.gif           # Demo recordings
   preview-02.gif
 ```
 
